@@ -6,34 +6,28 @@ const path = require("path");
 
 const app = express();
 
-// MIDDLEWARE
+// middleware
 app.use(express.json());
 app.use(cors());
 
-// DB CONNECT
+// DB connect
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch(err => console.log("DB Error:", err));
 
-// ROUTES
+// routes
 app.use("/api/tasks", require("./routes/taskRoutes"));
 
-// FRONTEND SERVE (VERY IMPORTANT)
+// serve frontend
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
-// ERROR HANDLING
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ error: "Server error" });
-});
-
-// PORT
+// PORT (VERY IMPORTANT FOR RAILWAY)
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Server running on ${PORT}`);
+  console.log("Server running on port " + PORT);
 });
