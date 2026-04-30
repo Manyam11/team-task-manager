@@ -8,22 +8,27 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// DB CONNECT
+// ROOT ROUTE (important)
+app.get("/", (req, res) => {
+  res.send("API is running 🚀");
+});
+
+// DB CONNECT (SAFE)
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("DB Connected"))
-.catch(err => console.log(err));
+  .then(() => console.log("MongoDB Connected"))
+  .catch(err => console.log("DB Error:", err));
 
 // ROUTES
-app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/tasks", require("./routes/taskRoutes"));
 
-// TEST ROUTE
-app.get("/", (req, res) => {
-    res.send("API is running 🚀");
+// ERROR HANDLING (VERY IMPORTANT)
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "Server error" });
 });
 
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`);
+  console.log(`Server running on ${PORT}`);
 });

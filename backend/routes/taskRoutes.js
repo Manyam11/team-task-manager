@@ -1,23 +1,26 @@
-const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 const Task = require("../models/Task");
-
-// CREATE TASK
-router.post("/", async (req, res) => {
-    const task = await Task.create(req.body);
-    res.json(task);
-});
 
 // GET ALL TASKS
 router.get("/", async (req, res) => {
+  try {
     const tasks = await Task.find();
     res.json(tasks);
+  } catch (err) {
+    console.log("GET ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// UPDATE TASK
-router.put("/:id", async (req, res) => {
-    const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
+// CREATE TASK
+router.post("/", async (req, res) => {
+  try {
+    const task = await Task.create(req.body);
     res.json(task);
+  } catch (err) {
+    console.log("POST ERROR:", err);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 module.exports = router;
