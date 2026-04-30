@@ -13,21 +13,19 @@ app.use(cors());
 // DB connect
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log("DB Error:", err));
+  .catch(err => console.log(err));
 
-// routes
+// API routes
 app.use("/api/tasks", require("./routes/taskRoutes"));
 
-// serve frontend
+// 🔥 FRONTEND SERVE (FIXED)
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-app.get("/", (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
-// PORT (VERY IMPORTANT FOR RAILWAY)
+// PORT
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
-});
+app.listen(PORT, () => console.log("Server running on " + PORT));
