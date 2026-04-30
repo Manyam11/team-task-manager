@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URI)
 // API routes
 app.use("/api/tasks", require("./routes/taskRoutes"));
 
-// 🔥 FRONTEND SERVE (FIXED)
+// 🔥 FRONTEND SERVE (IMPORTANT FIX)
 app.use(express.static(path.join(__dirname, "../frontend")));
 
 app.get("*", (req, res) => {
@@ -27,5 +27,4 @@ app.get("*", (req, res) => {
 
 // PORT
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => console.log("Server running on " + PORT));
